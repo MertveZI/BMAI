@@ -37,3 +37,5 @@ high_groups = high_eff[high_eff > 8].index
 top3 = df_clean[df_clean['group'].isin(high_groups)].nlargest(3, 'energy')
 print("Топ-3 по энергии в эффективных группах:")
 print(top3)
+
+#На будущее: почему атк странно генерирует, что нет штук с эффективностью больше 8

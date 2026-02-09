@@ -14,5 +14,3 @@ print(np.sort(eigvals)[::-1])
 print("\nГлавные направления (собственные векторы, отсортированные по убыванию):")
 idx = np.argsort(eigvals)[::-1]
 print(eigvecs[:, idx])
-
-# Надо дописать отображение через pyqtgraph
