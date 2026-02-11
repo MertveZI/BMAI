@@ -27,10 +27,10 @@ grouped = df_clean.groupby('group').agg({
     'energy': 'sum'           # sum
 })
 print("Группировка:")
-print(grouped)
 
 # Новая колонка
 df_clean['efficiency'] = (df_clean['energy'] / df_clean['temperature']).replace(0, np.nan)
+print(df_clean['efficiency'])
 # Фильтрация и топ
 high_eff = df_clean.groupby('group')['efficiency'].mean()
 high_groups = high_eff[high_eff > 8].index
