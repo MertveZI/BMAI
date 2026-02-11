@@ -20,7 +20,7 @@ print("Daily stats:")
 print(daily.head())
 
 # Rolling
-df['rolling_mean'] = df['value'].rolling(window=168).mean()  # 7 дней = сколько часов?
+df['rolling_mean'] = df['value'].rolling(window=168).mean()  # 7 дней = 168 часов?
 df['rolling_std'] = df['value'].rolling(window=168).std()
 # Max volatility
 max_vol_day = df['rolling_std'].idxmax()
