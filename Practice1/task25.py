@@ -2,21 +2,20 @@ import torch
 
 torch.manual_seed(42)
 
-A = torch.randn(32, 10)
-B = torch.randn(10, 8)
-C = torch.randn(32, 1)
-D = torch.randn(8)
+x1 = torch.randn(4, 6)
+x2 = torch.randn(4, 6)
+x3 = torch.randn(4, 6)
 
-# Матричное умножение
-out1 = ___
+# concat по разным осям
+cat_dim0 = torch.cat((x1, x2, x3), (12,6))
+cat_dim1 = torch.cat((x1, x2, x3), (4,18))
 
-#  + bias (broadcast)
-out2 = ___
+# stack → новое измерение
+stacked = torch.stack((x1, x2, x3), (3,4,6))     # (3,4,6)
 
-#  × веса на всю партию (broadcast)
-out3 = ___
+# разрезание stacked обратно
+x1r, x2r, x3r = torch.unbind(stacked, dim=0)
 
-#  einsum-вариант (всё сразу)
-out_einsum = torch.einsum(___) + ___
-
-print("Результаты совпадают?", torch.allclose(out3, out_einsum, atol=1e-6))
+# chunk — делим по строкам
+chunks = torch.chunk(cat_dim0, chunks=3, dim=[4,6])
+print([ch.shape for ch in chunks])

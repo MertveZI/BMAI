@@ -2,20 +2,20 @@ import torch
 
 torch.manual_seed(42)
 
-x1 = torch.randn(4, 6)
-x2 = torch.randn(4, 6)
-x3 = torch.randn(4, 6)
+scores = torch.randn(8, 5)
+best_idx = torch.tensor([0, 2, 4, 1, 3])   # лучший в каждой игре
 
-# concat по разным осям
-cat_dim0 = torch.cat(___)      # (12,6)
-cat_dim1 = torch.cat(___)      # (4,18)
+# gather — берём score лучшего в каждой колонке
+best_scores = torch.gather(scores, dim=0, index=best_idx.unsqueeze(0))
 
-# stack → новое измерение
-stacked = torch.stack(___)     # (3,4,6)
+print("Лучшие результаты по играм:", best_scores.squeeze())
 
-# разрезание stacked обратно
-x1r, x2r, x3r = torch.unbind(___, dim=0)
+# index_select — строки по списку
+selected_games = torch.index_select(scores, dim=1, index=torch.tensor([1, 3]))
+print(selected_games.shape)   # (8,2)
 
-# chunk — делим по строкам
-chunks = torch.chunk(cat_dim0, chunks=___, dim=___)
-print([ch.shape for ch in chunks])             # [4,6] × 3
+# scatter — проставить -1 всем, кроме лучших
+mask = torch.zeros_like(scores)
+mask.scatter_(dim=0, index=best_idx.unsqueeze(0), value=1.0)
+scores_non_best = scores.clone()
+scores_non_best[mask == 0] = -1

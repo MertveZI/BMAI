@@ -2,20 +2,31 @@ import torch
 
 torch.manual_seed(42)
 
-scores = torch.randn(8, 5)
-best_idx = ___   # лучший в каждой игре
+v1 = torch.randn(128)
+v2 = torch.randn(128)
 
-# gather — берём score лучшего в каждой колонке
-best_scores = torch.gather(___, index=best_idx.unsqueeze(0))
+A = torch.randn(64, 32)
+B = torch.randn(32, 16)
 
-print("Лучшие результаты по играм:", best_scores.squeeze())
+batch_feat = torch.randn(16, 128)
+weight = torch.randn(128, 64)
 
-# index_select — строки по списку
-selected_games = torch.index_select(___)
-print(selected_games.shape)   # (8,2)
+# dot product
+dot = torch.einsum('i,i->', v1, v2)
 
-# scatter — проставить -1 всем, кроме лучших
-mask = torch.zeros_like(scores)
-mask.scatter_(___, index=best_idx.unsqueeze(0), value=1.0)
-scores_non_best = scores.clone()
-scores_non_best[mask == 0] = -1
+# matmul
+matmul = torch.einsum('ij,jk->ik', A, B)
+
+# batch matmul: (b,i) @ (i,j) → (b,j)
+batch_out = torch.einsum('bi,ij->bj', batch_feat, weight)
+
+# outer product
+outer = torch.einsum('i,j->ij', v1, v2)
+
+# trace
+M = torch.randn(30, 30)
+tr = torch.einsum('ii->', M)
+
+# 6. global average по channel,h,w
+images = torch.randn(8, 3, 224, 224)
+global_sum = torch.einsum('bchw->b', images)

@@ -6,12 +6,11 @@ a = torch.randn(4, 5, 6)
 
 print(a.shape, a.dim(), a.numel())
 
-# permute
-b = a.___(2, 0, 1)
+b = a.permute(2, 0, 1)
 print("После permute:", b.shape)
 
 # transpose (меняем две оси за раз)
-c = a.___(0, 2).___(1, 2)         # 6×5×4 → 6×4×5
+c = a.transpose(0, 2).transpose(1, 2)         # 6×5×4 → 6×4×5
 print("После transpose:", c.shape)
 
 # view vs reshape

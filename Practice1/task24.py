@@ -2,21 +2,21 @@ import torch
 
 torch.manual_seed(42)
 
-a = torch.randn(4, 5, 6)
+A = torch.randn(32, 10)
+B = torch.randn(10, 8)
+C = torch.randn(32, 1)
+D = torch.randn(8)
 
-print(a.shape, a.dim(), a.numel())
+# Матричное умножение
+out1 = A @ B
 
-# permute
-b = a.___(2, 0, 1)
-print("После permute:", b.shape)
+# + bias (broadcast)
+out2 = out1 + C
 
-# transpose (меняем две оси за раз)
-c = a.___(0, 2).___(1, 2)         # 6×5×4 → 6×4×5
-print("После transpose:", c.shape)
+# × веса на всю партию (broadcast)
+out3 = out2 * D
 
-# view vs reshape
-flat_view  = a.view(-1, 10)     # -1 = автоматический расчёт
-flat_reshape = a.reshape(12, 10)
+# einsum-вариант (всё сразу)
+out_einsum = torch.einsum('bi,ij,j->bj', A, B, D) + C * D
 
-print("Суммы совпадают?", torch.allclose(a.sum(), flat_view.sum()))
-print("view  и reshape идентичны?", torch.equal(flat_view, flat_reshape))
+print("Результаты совпадают?", torch.allclose(out3, out_einsum, atol=1e-6))
